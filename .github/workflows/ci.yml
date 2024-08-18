@@ -24,7 +24,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           rust-version: ${{ env.RUST_VERSION }}
       - run: npm ci
       - run: npm run build
@@ -39,67 +39,8 @@ jobs:
       - name: Pack
         uses: neon-actions/pack@v0.1
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           rust-version: ${{ env.RUST_VERSION }}
-          github-release: false
-
-  macos-arm64-build:
-    name: Builds (macOS arm64)
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [aarch64-apple-darwin]
-    runs-on: macos-13-xlarge
-    permissions:
-      contents: write
-    steps:
-      - name: Build
-        uses: neon-actions/build@v0.1
-        with:
-          target: ${{ matrix.target }}
-          node-version: ${{ env.NODE_VERSION }}
-          rust-version: ${{ env.RUST_VERSION }}
-          npm-publish: false
-          github-release: false
-
-  macos-x64-build:
-    name: Builds (macOS x64)
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [x86_64-apple-darwin]
-    runs-on: macos-13
-    permissions:
-      contents: write
-    steps:
-      - name: Build
-        uses: neon-actions/build@v0.1
-        with:
-          target: ${{ matrix.target }}
-          node-version: ${{ env.NODE_VERSION }}
-          rust-version: ${{ env.RUST_VERSION }}
-          npm-publish: false
-          github-release: false
-
-  windows-builds:
-    name: Builds (Windows)
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [x86_64-pc-windows-msvc]
-    runs-on: windows-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
-      - name: Build
-        uses: neon-actions/build@v0.1
-        with:
-          target: ${{ matrix.target }}
-          node-version: ${{ env.NODE_VERSION }}
-          rust-version: ${{ env.RUST_VERSION }}
-          npm-publish: false
           github-release: false
 
   other-builds:
@@ -107,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [x86_64-unknown-linux-gnu, x86_64-unknown-linux-musl, aarch64-unknown-linux-gnu, aarch64-unknown-linux-musl]
+        target: [x86_64-unknown-linux-musl]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -120,8 +61,8 @@ jobs:
         uses: neon-actions/build@v0.1
         with:
           target: ${{ matrix.target }}
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           rust-version: ${{ env.RUST_VERSION }}
-          use-cross: true
+          # use-cross: true
           npm-publish: false
           github-release: false
